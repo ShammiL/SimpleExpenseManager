@@ -81,7 +81,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
         return res;
     }
 
-    public boolean updateData(String Account_no,String bank,String Account_holder,double initial_balance) {
+    public boolean updateAccount(String Account_no,String bank,String Account_holder,double initial_balance) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(col_1_1,Account_no);
@@ -92,7 +92,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
         return true;
     }
 
-    public Integer deleteData (String id) {
+    public Integer deleteAccount (String id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_NAME_1, "ID = ?",new String[] {id});
     }
