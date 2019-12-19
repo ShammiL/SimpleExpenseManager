@@ -44,7 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table "+TABLE_NAME_1 + " (Account_no Text primary key,bank text,Account_holder text,initial_balance real)");
-        db.execSQL("create table "+TABLE_NAME_2 + " ( date text,Account_no text,expense_type text,amount real, foreign key (Account_no) references accounts(Account_no))");
+        db.execSQL("create table "+TABLE_NAME_2 + " (date text,Account_no text,expense_type text,amount real, foreign key (Account_no) references accounts(Account_no))");
     }
 
     @Override
@@ -160,7 +160,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
     public List<Transaction> getPaginatedTransactions(int limit) {
         SQLiteDatabase db = this.getWritableDatabase();
         DateFormat format = new SimpleDateFormat("m-d-yyyy", Locale.ENGLISH);
-        Cursor res = db.rawQuery("select * from "+TABLE_NAME_2 + "limit "+ limit,null);
+        Cursor res = db.rawQuery("select * from "+TABLE_NAME_2 + " limit "+ limit+";",null);
         int count = res.getCount();
         ArrayList<Transaction> arr2 = new ArrayList<>();
         if (count ==0)
