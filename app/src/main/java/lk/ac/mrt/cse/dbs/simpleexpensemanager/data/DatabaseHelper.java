@@ -9,10 +9,18 @@ public class DatabaseHelper extends SQLiteOpenHelper
 {
     public static final String DATABASE_NAME = "170311U.db";
     public static final String TABLE_NAME_1 = "accounts";
+    public static final String TABLE_NAME_2 = "transactions";
+
     public static final String col_1_1 = "Account_no";
     public static final String col_1_2 = "bank";
     public static final String col_1_3 = "Account_holder";
     public static final String col_1_4 = "initial_balance";
+    public static final String col_2_1 = "date";
+    public static final String col_2_2 = "Account_no";
+    public static final String col_2_3 = "expense_type";
+    public static final String col_2_4 = "amount";
+
+
 
     public DatabaseHelper(@Nullable Context context) {
         super(context,DATABASE_NAME,null,1);
@@ -21,7 +29,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table "+TABLE_NAME_1 + " ( Account_no integer primary key,bank text,Account_holder text,initial_balance decimal(6,2))");
+        db.execSQL("create table "+TABLE_NAME_1 + " (Account_no Text primary key,bank text,Account_holder text,initial_balance real)");
+        db.execSQL("create table "+TABLE_NAME_2 + " ( date text,Account_no text,expense_type text,amount real, foreign key (Account_no) references accounts(Account_no))");
     }
 
     @Override
