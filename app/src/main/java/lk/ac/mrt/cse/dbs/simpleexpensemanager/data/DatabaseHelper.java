@@ -160,7 +160,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
     public List<Transaction> getPaginatedTransactions(int limit) {
         SQLiteDatabase db = this.getWritableDatabase();
         DateFormat format = new SimpleDateFormat("m-d-yyyy", Locale.ENGLISH);
-        Cursor res = db.rawQuery("select * from "+TABLE_NAME_2 + " limit "+ limit+";",null);
+        Cursor res = db.rawQuery("select * from "+TABLE_NAME_2 + " limit "+ limit,null);
         int count = res.getCount();
         ArrayList<Transaction> arr2 = new ArrayList<>();
         if (count ==0)
