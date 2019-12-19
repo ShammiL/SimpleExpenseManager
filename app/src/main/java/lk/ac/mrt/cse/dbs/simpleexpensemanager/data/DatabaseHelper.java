@@ -7,6 +7,18 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import lk.ac.mrt.cse.dbs.simpleexpensemanager.data.model.Account;
+import lk.ac.mrt.cse.dbs.simpleexpensemanager.data.model.ExpenseType;
+import lk.ac.mrt.cse.dbs.simpleexpensemanager.data.model.Transaction;
+
 public class DatabaseHelper extends SQLiteOpenHelper
 {
     public static final String DATABASE_NAME = "170311U.db";
@@ -69,16 +81,108 @@ public class DatabaseHelper extends SQLiteOpenHelper
             return true;
     }
 
-    public Cursor getAllAccountData() {
+    public Account getAccount(String acc_no) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("select * from "+TABLE_NAME_1 + " where Account_no = ?",new String[]{acc_no});
+        int count = res.getCount();
+        Account acc = null;
+        if (count ==0)
+            return acc;
+        else
+            while (res.moveToNext()) {
+                String Account_no = res.getString(0);
+                String bank = res.getString(1);
+                String Account_holder = res.getString(2);
+                double initial_balance = res.getDouble(3);
+
+
+                acc= new Account(Account_no, bank, Account_holder, initial_balance);
+            }
+
+        return acc;
+    }
+
+    public List<Account> getAllAccountData() {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery("select * from "+TABLE_NAME_1,null);
+        int count = res.getCount();
+        ArrayList<Account> arr2 = new ArrayList<>();
+        if (count ==0)
+            return arr2;
+        else
+            while (res.moveToNext()) {
+                String Account_no = res.getString(0);
+                String bank = res.getString(1);
+                String Account_holder = res.getString(2);
+                double initial_balance = res.getDouble(3);
+
+
+                arr2.add(new Account(Account_no, bank, Account_holder, initial_balance));
+            }
+
+        return arr2;
+    }
+
+    public Cursor getAccountNumbers() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("select Account_no from "+TABLE_NAME_1,null);
         return res;
     }
 
-    public Cursor getAllTransactionData() {
+    public List<Transaction> getAllTransactionData() {
         SQLiteDatabase db = this.getWritableDatabase();
+        DateFormat format = new SimpleDateFormat("m-d-yyyy", Locale.ENGLISH);
         Cursor res = db.rawQuery("select * from "+TABLE_NAME_2,null);
-        return res;
+        int count = res.getCount();
+        ArrayList<Transaction> arr2 = new ArrayList<>();
+        if (count ==0)
+            return arr2;
+        else
+            while (res.moveToNext()) {
+                String Account_no = res.getString(1);
+                Date date = new Date();
+                ExpenseType expense_type = ExpenseType.valueOf(res.getString(2));
+                try {
+                    date =  format.parse(res.getString(0));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                double amount = res.getDouble(3);
+
+//Date a = date1.parse(date);
+                arr2.add(new Transaction(date, Account_no, expense_type, amount));
+            }
+
+        return arr2;
+    }
+
+    public List<Transaction> getPaginatedTransactions(int limit) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        DateFormat format = new SimpleDateFormat("m-d-yyyy", Locale.ENGLISH);
+        Cursor res = db.rawQuery("select * from "+TABLE_NAME_2 + "limit "+ limit,null);
+        int count = res.getCount();
+        ArrayList<Transaction> arr2 = new ArrayList<>();
+        if (count ==0)
+            return arr2;
+        else
+            while (res.moveToNext()) {
+                String Account_no = res.getString(1);
+                Date date = new Date();
+                ExpenseType expense_type = ExpenseType.valueOf(res.getString(2));
+                try {
+                    date =  format.parse(res.getString(0));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                double amount = res.getDouble(3);
+
+//Date a = date1.parse(date);
+                arr2.add(new Transaction(date, Account_no, expense_type, amount));
+            }
+
+        return arr2;
     }
 
     public boolean updateAccount(String Account_no,String bank,String Account_holder,double initial_balance) {
@@ -92,8 +196,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
         return true;
     }
 
-    public Integer deleteAccount (String id) {
+    public Integer deleteAccount (String AccountNo) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TABLE_NAME_1, "ID = ?",new String[] {id});
+        return db.delete(TABLE_NAME_1, "Account_no = ?",new String[] {AccountNo});
     }
 }
