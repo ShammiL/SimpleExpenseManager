@@ -17,7 +17,7 @@
 package lk.ac.mrt.cse.dbs.simpleexpensemanager.data.model;
 
 /**
- * This POJO holds the information about an account.
+ * This POJO holds the information about an account. 170311U
  */
 public class Account {
     private String accountNo;
