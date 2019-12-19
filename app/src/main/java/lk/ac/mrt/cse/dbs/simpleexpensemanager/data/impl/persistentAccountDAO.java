@@ -14,12 +14,12 @@ import lk.ac.mrt.cse.dbs.simpleexpensemanager.data.model.ExpenseType;
 
 public class persistentAccountDAO implements AccountDAO {
 
-    DatabaseHelper db;
+    private DatabaseHelper db;
+    public persistentAccountDAO(Context context){
 
-    persistentAccountDAO(Context context)
-    {
-        db = new DatabaseHelper(context);
+        this.db = new DatabaseHelper(context);
     }
+
 
     @Override
     public List<String> getAccountNumbersList() {
