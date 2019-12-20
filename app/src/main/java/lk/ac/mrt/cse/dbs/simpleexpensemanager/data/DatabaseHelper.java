@@ -21,7 +21,7 @@ import lk.ac.mrt.cse.dbs.simpleexpensemanager.data.model.Transaction;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
-    public static final String DATABASE_NAME = "170311U.db";
+    public static final String DATABASE_NAME = "170311U";
     public static final String TABLE_NAME_1 = "accounts";
     public static final String TABLE_NAME_2 = "transactions";
 
@@ -43,8 +43,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table "+TABLE_NAME_1 + " (Account_no Text primary key,bank text,Account_holder text,initial_balance real)");
-        db.execSQL("create table "+TABLE_NAME_2 + " (date text,Account_no text,expense_type text,amount real, foreign key (Account_no) references accounts(Account_no))");
+        db.execSQL("create table "+TABLE_NAME_1 + " (Account_no Text(50) primary key,bank text(50),Account_holder text(50),initial_balance real)");
+        db.execSQL("create table "+TABLE_NAME_2 + " (date date,Account_no text(50),expense_type text(50),amount real, foreign key (Account_no) references accounts(Account_no))");
     }
 
     @Override
